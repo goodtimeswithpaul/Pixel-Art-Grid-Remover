@@ -6,8 +6,10 @@ It was made as a proof of concept for a module of an grid coloring game webapp.
 See example below
 
 Before
-![totoro](https://github.com/goodtimeswithpaul/Pixel-Art-Grid-Remover/assets/152006920/e73013ec-0232-46ba-bd29-5af7976acce9)
+![Screenshot from 2023-11-25 13-56-35](https://github.com/goodtimeswithpaul/Pixel-Art-Grid-Remover/assets/152006920/fe35e580-56c7-4789-9f43-df2fdeb448ac)
+
 After
-![image](https://github.com/goodtimeswithpaul/Pixel-Art-Grid-Remover/assets/152006920/b01519f3-4280-4205-82d3-3e2c1505b8a0)
+![image](https://github.com/goodtimeswithpaul/Pixel-Art-Grid-Remover/assets/152006920/d54c38c7-3c9b-4ae0-98c1-d56b756e85e0)
+
 
 
