@@ -22,13 +22,26 @@ def guessColumnSize(image: ImmutableImage): Int =
   println(residualRow)
 
   // Computing the size of each column
-  val computedColumnSizes = residualRow.foldLeft(List(0))((acc, x) => {
-    x match
-      case false => (acc.head + 1) :: acc.tail
-      case true => 1 :: acc
-  }).tail
+  //val computedColumnSizes = residualRow.foldLeft(List(0))((acc, x) => {
+  //  x match
+  //    case false => (acc.head + 1) :: acc.tail
+  //    case true => 1 :: acc
+  //}).tail
 
+  
+  
+  def computeColumnSizes(residualRow : List[Boolean]) =
+    def innerCCS(list: List[Boolean], current: Int,foundCol: Boolean) : List[Int] = 
+      (list, foundCol) match 
+        case (false :: xs, true) => current :: innerCCS(xs, 1, false)
+        case (false :: xs, false) => innerCCS(xs, current+1, false)
+        case (x :: xs, _) => innerCCS(xs, current+1, true)
+        case _ => current :: Nil
+
+    innerCCS(residualRow, 0, true)
   // println(computedColumnSizes)
+
+  val computedColumnSizes = computeColumnSizes(residualRow)
 
   // Inferring the size of a column by grouping same results together
   val guessedColumnSize = computedColumnSizes.groupBy(identity).map((k, v) => (k, v.size)).toList.sortWith((a,b) => a(1) > b(1))
@@ -57,17 +70,27 @@ def guessColumnSize(image: ImmutableImage): Int =
   val cellSize = guessColumnSize(imageInput)
   val numberOfColumns = imageInput.width / cellSize
   val numberOfRows = imageInput.height / cellSize
-  print(numberOfColumns)
+  println("number of column" + numberOfColumns)
 
   val rows = getRowsPixel(imageInput)
+
+  //val pixels = for
+  //  y <- Range(0, numberOfRows)
+  //  x <- Range(0, numberOfColumns)
+  //yield vector4DToPixel(computeCellMeanColor(x, y, cellSize, imageInput), x, y)
 
   val pixels = for
     y <- Range(0, numberOfRows)
     x <- Range(0, numberOfColumns)
-  yield vector4DToPixel(computeCellMeanColor(x, y, cellSize, imageInput), x, y)
+  yield computeCellMeanColor(x, y, cellSize, imageInput)
 
-  val imageOutput = ImmutableImage.create(numberOfColumns, numberOfRows, pixels.toArray)
+  //println(pixels.groupBy(identity).map((k, v) => (k, v.size)).toList)
 
+  
+  
+  val formated = reducedColors(pixels.toList).zip(Range(0, numberOfColumns * numberOfRows)).map((c, xy) => vector4DToPixel(c, xy %numberOfColumns, xy/numberOfColumns))
+
+  val imageOutput = ImmutableImage.create(numberOfColumns, numberOfRows, formated.toArray)
   val writer = new PngWriter()
   imageOutput.output(writer, new File("test.png"))
 
